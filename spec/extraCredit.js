@@ -1,13 +1,8 @@
 (function() {
   'use strict';
 
-  describe('Advanced', function() {
-
+  describe('Extra Credit', function() {
     describe('invoke, when provided a function reference', function() {
-      checkForNativeMethods(function() {
-        _.invoke(['dog', 'cat'], _.identity);
-      })
-
       it('runs the input function on each item in the array, and returns a list of results', function() {
         var reverse = function(){
           return this.split('').reverse().join('');
@@ -17,14 +12,9 @@
 
         expect(reversedStrings).to.eql(['god', 'tac']);
       });
-
     });
 
     describe('invoke, when provided a method name', function() {
-      checkForNativeMethods(function() {
-        _.invoke(['dog', 'cat'], 'toUpperCase');
-      })
-
       it('runs the specified method on each item in the array, and returns a list of results', function() {
         var upperCasedStrings = _.invoke(['dog', 'cat'], 'toUpperCase');
 
@@ -33,12 +23,6 @@
     });
 
     describe('sortBy', function() {
-      checkForNativeMethods(function() {
-        _.sortBy([{name : 'curly', age : 50}, {name : 'moe', age : 30}], function(person) {
-          return person.age;
-        });
-      });
-
       it('should sort by age', function() {
         var people = [{name : 'curly', age : 50}, {name : 'moe', age : 30}];
         people = _.sortBy(people, function(person) {
@@ -89,10 +73,6 @@
     });
 
     describe('flatten', function() {
-      checkForNativeMethods(function() {
-        _.flatten([1, [2], [3, [[[4]]]]])
-      });
-
       it('can flatten nested arrays', function() {
         var nestedArray = [1, [2], [3, [[[4]]]]];
 
@@ -101,10 +81,6 @@
     });
 
     describe('zip', function() {
-      checkForNativeMethods(function() {
-        _.zip(['moe', 'larry', 'curly'], [30, 40, 50], [true])
-      });
-
       it('should zip together arrays of different lengths', function() {
         var names = ['moe', 'larry', 'curly'], ages = [30, 40, 50], leaders = [true];
 
@@ -117,24 +93,15 @@
     });
 
     describe('intersection', function() {
-      checkForNativeMethods(function() {
-        _.intersection(['moe', 'curly', 'larry'], ['moe', 'groucho'])
-      });
-
       it('should take the set intersection of two arrays', function() {
         var stooges = ['moe', 'curly', 'larry'];
         var leaders = ['moe', 'groucho'];
 
         expect(_.intersection(stooges, leaders)).to.eql(['moe']);
       });
-
     });
 
     describe('difference', function() {
-      checkForNativeMethods(function() {
-        _.difference([1,2,3], [2,30,40])
-      });
-
       it('should return the difference between two arrays', function() {
         var diff = _.difference([1,2,3], [2,30,40]);
 
@@ -146,7 +113,6 @@
 
         expect(result).to.eql([3, 4]);
       });
-
     });
 
     describe('throttle, when given a wait of 100ms', function() {
@@ -154,10 +120,6 @@
 
       beforeEach(function() {
         callback = sinon.spy();
-      });
-
-      checkForNativeMethods(function() {
-        _.throttle(callback, 100)
       });
 
       it('should return a function callable twice in the first 200ms', function() {
@@ -171,22 +133,6 @@
 
         expect(callback).to.have.been.calledTwice;
       });
-
     });
-
   });
-
-  function checkForNativeMethods(runUnderbarFunction) {
-    it('should not use the native version of any underbar methods in its implementation', function() {
-      // These spies are set up in testSupport.js
-      runUnderbarFunction();
-      expect(Array.prototype.map.called).to.equal(false);
-      expect(Array.prototype.indexOf.called).to.equal(false);
-      expect(Array.prototype.forEach.called).to.equal(false);
-      expect(Array.prototype.filter.called).to.equal(false);
-      expect(Array.prototype.reduce.called).to.equal(false);
-      expect(Array.prototype.every.called).to.equal(false);
-      expect(Array.prototype.some.called).to.equal(false);
-    });
-  }
 }());

@@ -4,12 +4,9 @@
   describe('Part I', function() {
 
     describe('identity', function() {
-      checkForNativeMethods(function() {
-        _.identity(1);
-      });
+      var uniqueObject = {};
 
       it('should return whatever value is passed into it', function() {
-        var uniqueObject = {};
         expect(_.identity(1)).to.equal(1);
         expect(_.identity('string')).to.equal('string');
         expect(_.identity(false)).to.be.false;
@@ -18,10 +15,6 @@
     });
 
     describe('first', function() {
-      checkForNativeMethods(function() {
-        _.first([1,2,3]);
-      });
-
       it('should be able to pull out the first element of an array', function() {
         expect(_.first([1,2,3])).to.equal(1);
       });
@@ -40,10 +33,6 @@
     });
 
     describe('last', function() {
-      checkForNativeMethods(function() {
-        _.last([1,2,3]);
-      });
-
       it('should pull the last element from an array', function() {
         expect(_.last([1,2,3])).to.equal(3);
       });
@@ -62,10 +51,6 @@
     });
 
     describe('each', function() {
-      checkForNativeMethods(function() {
-        _.each([1,2,3,4], function(number) {});
-      });
-
       it('should iterate over arrays, providing access to the element, index, and array itself', function() {
         var animals = ['ant', 'bat', 'cat'];
         var iterationInputs = [];
@@ -115,10 +100,6 @@
     });
 
     describe('indexOf', function() {
-      checkForNativeMethods(function() {
-        _.indexOf([10, 20, 30, 40], 40)
-      });
-
       it('should find 40 in the list', function() {
         var numbers = [10, 20, 30, 40, 50];
 
@@ -145,11 +126,6 @@
     });
 
     describe('filter', function() {
-      checkForNativeMethods(function() {
-        var isEven = function(num) { return num % 2 === 0; };
-        _.filter([1, 2, 3, 4], isEven)
-      });
-
       it('should return all even numbers in an array', function() {
         var isEven = function(num) { return num % 2 === 0; };
         var evens = _.filter([1, 2, 3, 4, 5, 6], isEven);
@@ -174,11 +150,6 @@
     });
 
     describe('reject', function() {
-      checkForNativeMethods(function() {
-        var isEven = function(num) { return num % 2 === 0; };
-        _.reject([1, 2, 3, 4, 5, 6], isEven)
-      });
-
       it('should reject all even numbers', function() {
         var isEven = function(num) { return num % 2 === 0; };
         var odds = _.reject([1, 2, 3, 4, 5, 6], isEven);
@@ -203,10 +174,6 @@
     });
 
     describe('uniq', function() {
-      checkForNativeMethods(function() {
-        _.uniq([1, 2, 3, 4])
-      });
-
       it('should return all unique values contained in an unsorted array', function() {
         var numbers = [1, 2, 1, 3, 1, 4];
 
@@ -229,12 +196,6 @@
     });
 
     describe('map', function() {
-      checkForNativeMethods(function() {
-        _.map([1, 2, 3, 4], function(num) {
-          return num * 2;
-        })
-      });
-
       it('should apply a function to every value in an array', function() {
         var doubledNumbers = _.map([1, 2, 3], function(num) {
           return num * 2;
@@ -254,15 +215,6 @@
     });
 
     describe('pluck', function() {
-      checkForNativeMethods(function() {
-        var people = [
-          { name: 'moe', age: 30 },
-          { name: 'curly', age: 50 }
-        ];
-
-        _.pluck(people, 'name');
-      });
-
       it('should return values contained at a user-defined property', function() {
         var people = [
           { name: 'moe', age: 30 },
@@ -285,11 +237,6 @@
     });
 
     describe('reduce', function() {
-      checkForNativeMethods(function() {
-        var add = function(tally, item) {return tally + item; };
-        _.reduce([1, 2, 3, 4], add)
-      });
-
       it('should be able to sum up an array', function() {
         var add = function(tally, item) {return tally + item; };
         var total = _.reduce([1, 2, 3], add, 0);
@@ -321,17 +268,4 @@
     });
   });
 
-  function checkForNativeMethods(runUnderbarFunction) {
-    it('should not use the native version of any underbar methods in its implementation', function() {
-      // These spies are set up in testSupport.js
-      runUnderbarFunction();
-      expect(Array.prototype.map.called).to.equal(false);
-      expect(Array.prototype.indexOf.called).to.equal(false);
-      expect(Array.prototype.forEach.called).to.equal(false);
-      expect(Array.prototype.filter.called).to.equal(false);
-      expect(Array.prototype.reduce.called).to.equal(false);
-      expect(Array.prototype.every.called).to.equal(false);
-      expect(Array.prototype.some.called).to.equal(false);
-    });
-  }
 }());
