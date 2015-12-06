@@ -38,11 +38,10 @@
   // Like first, but for the last elements. If n is undefined, return just the
   // last element.
   _.last = function(array, n) {
-    var length = array.length;
-    if(n>length){
-      return array;
-    }
-    return n === undefined ? array[length-1] : array.slice(length-n,length);
+    if(n === 0)
+      return [];
+    else 
+      return n === undefined ? array[array.length-1] : array.slice(-n); 
   };
 
   // Call iterator(value, key, collection) for each element of collection.
@@ -51,14 +50,15 @@
   // Note: _.each does not have a return value, but rather simply runs the
   // iterator function over each item in the input collection.
   _.each = function(collection, iterator) {
-    if(Array.isArray(collection)){
+    if(collection.constructor === Array){
       for(var i=0;i<collection.length;i++){
         iterator(collection[i], i, collection);
       }
-    } else{
-      for(var prop in collection){        
-        iterator(collection[prop],prop, collection);
+    } else {
+      for(var prop in collection){
+        iterator(collection[prop], prop, collection);
       }
+      
     }
   };
 
@@ -69,25 +69,25 @@
     // implemented for you. Instead of using a standard `for` loop, though,
     // it uses the iteration helper `each`, which you will need to write.
     var result = -1;
-
     _.each(array, function(item, index) {
       if (item === target && result === -1) {
         result = index;
       }
     });
-
     return result;
   };
 
   // Return all elements of an array that pass a truth test.
   _.filter = function(collection, test) {
-    var arr = [];
-    _.each(collection, function(element){
-      if(test(element)){
-        arr.push(element);
-      }
-    });
-    return arr;
+    
+
+    // var arr = [];
+    // _.each(collection, function(element){
+    //   if(test(element)){p
+    //     arr.push(element);
+    //   }
+    // });
+    // return arr;
   };
 
   // Return all elements of an array that don't pass a truth test.
@@ -518,6 +518,8 @@ _.memoize = function(func){
   //
   // Note: This is difficult! It may take a while to implement.
   _.throttle = function(func, wait) {
-
+    function executableOnce(){
+      
+    }
   };
 }());
