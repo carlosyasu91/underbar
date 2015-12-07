@@ -78,56 +78,48 @@
   };
 
   // Return all elements of an array that pass a truth test.
-  _.filter = function(collection, test) {
-    
-
-    // var arr = [];
-    // _.each(collection, function(element){
-    //   if(test(element)){p
-    //     arr.push(element);
-    //   }
-    // });
-    // return arr;
+  _.filter = function(collection, test) {    
+    var result = [];
+    _.each(collection, function(element){
+      if(test(element)) result.push(element);
+    });
+    return result;
   };
 
   // Return all elements of an array that don't pass a truth test.
-  _.reject = function(collection, test) {
-    
-    return _.filter(collection, function(value){
-      return !test(value);
-    });
-
+  _.reject = function(collection, test) {    
+    return _.filter(collection, function(element){
+      return !test(element);
+    })
   };
 
   // Produce a duplicate-free version of the array.
-  _.uniq = function(array) {
-    var newArr   = [];
-    var isInArray = false;
+ _.uniq = function(array) {
+    var result = [];
+    var alreadyInResults = false;
     for(var i=0;i<array.length;i++){
-      for(var j=0;j<newArr.length;j++){
-        if(newArr[j] === array[i]){
-          isInArray = true;
+      for(var j=0;j<result.length;j++){
+        if(result[j] === array[i]){
+          alreadyInResults = true;    
         }
       }
-      if(!isInArray){
-        newArr.push(array[i]);
+      if(!alreadyInResults){
+        result.push(array[i]);
       }
-      isInArray = false;
+        alreadyInResults = false;
     }
-    return newArr;
+    return result;
   };
-
-
   // Return the results of applying an iterator to each element.
   _.map = function(collection, iterator) {
     // map() is a useful primitive iteration function that works a lot
     // like each(), but in addition to running the operation on all
     // the members, it also maintains an array of results.
-    var arr = [];
+    var result = [];
     _.each(collection, function(element){
-      arr.push(iterator(element));
+      result.push(iterator(element));
     });
-    return arr;
+    return result;
   };
 
   /*
@@ -143,9 +135,11 @@
     // TIP: map is really handy when you want to transform an array of
     // values into a new array of values. _.pluck() is solved for you
     // as an example of this.
-    return _.map(collection, function(item){
-      return item[key];
+    var result = [];
+    _.each(collection, function(element, i){
+      result.push(element[key]);
     });
+    return result;
   };
 
   // Reduces an array or object to a single value by repetitively calling
@@ -169,16 +163,22 @@
   //   }); // should be 5, regardless of the iterator function passed in
   //          No accumulator is given so the first element is used.
   _.reduce = function(collection, iterator, accumulator) {
-    var initializing = arguments.length === 2;
-      _.each(collection, function(element, index){
-        if(initializing){
-          accumulator = element;
-          initializing = false; 
-        } else {
-          accumulator = iterator(accumulator,element);
-        }
+    if(arguments.length >= 3){
+      _.each(collection, function(element){
+        accumulator = iterator(accumulator, element);
       });
       return accumulator;
+    } else {
+      var current;
+      _.each(collection, function(element, i){
+        if(i==0)
+          current = element;
+        else 
+          current = iterator(current, element);
+      });
+      return current;
+    }
+
   };
 
   //Determine if the array or object contains a given value (using `===`).
@@ -292,18 +292,17 @@
   // _.memoize should return a function that, when called, will check if it has
   // already computed the result for the given argument and return that value
   // instead if possible.
-
-_.memoize = function(func){
+ _.memoize = function(func) {
     var results = {};
     return function(){
-      var key = JSON.stringify(arguments);
-      if(!(key in results)){
-        results[key] = func.apply(this, arguments);
+      if(results[arguments[0]] === undefined){
+        results[arguments[0]] = func.apply(this, arguments);
+        return results[arguments[0]];
+      } else {
+        return results[arguments[0]];
       }
-      return results[key];
     }
   };
-
 
   // Delays a function for the given number of milliseconds, and then calls
   // it with the arguments supplied.
@@ -337,6 +336,7 @@ _.memoize = function(func){
     var result = [];
     var newArray = array.slice(0,array.length);
     var random = 0;
+
     while(newArray.length>0){
       random = Math.floor(Math.random()*newArray.length);
       result.push(newArray[random]);
@@ -398,7 +398,6 @@ _.memoize = function(func){
       arr.sort();
       _.each(arr, function(arrElement){
         _.each(collection,function(colElement){
-          console.log("arr Element: " + arrElement + " colElement: " + colElement);
           if(arrElement === iterator(colElement) && isUndefined === false){
             res.push(colElement);
             if(arrElement === undefined)
